@@ -13,16 +13,26 @@ import B from './assets/states/B.svg';
 
 function App() {
 
-  let intervalID;
-
   const [isPlaying, setisPlaying] = useState(false);
   const [isForward, setisForward] = useState(false);
   const [isRewind, setisRewind] = useState(false);
+  const [intervalID, setIntervalID] = useState(0);
   const [state, setState] = useState(S);
   const standardColor = 'bg-[#B07154]';
   const activeColor = 'bg-[#4C2B1C]';
 
-  const timer = (start, to) => {
+  const endTimer = (start) => {
+    console.log((Date.now() - start));
+    if ((Date.now() - start) > 10000) {
+      setState(A);
+      setisForward(false);
+      setisRewind(false);
+      setisPlaying(false);
+      clearInterval(intervalID);
+    }
+  }
+  
+  const fastTimer = (start, to) => {
     if ((Date.now() - start) > 5000) {
       setState(to);
       setisForward(false);
@@ -34,7 +44,7 @@ function App() {
 
   const handlePlayPause = () => {
 
-    clearInterval();
+    clearInterval(intervalID);
 
     if (isForward && isPlaying) {
       setisForward(false);
@@ -47,6 +57,8 @@ function App() {
     }
 
     else if (!isPlaying) {
+      const start = Date.now();
+      setIntervalID(setInterval(endTimer, 1000, start));
       setisPlaying(true);
       setState(P);
     }
@@ -58,17 +70,18 @@ function App() {
   }
 
   const handleForward = () => {
+    clearInterval(intervalID);
     const start = Date.now();
-    setInterval(timer, 1000, start, A);
+    setIntervalID(setInterval(fastTimer, 1000, start, A));
     if (isPlaying && !isForward) setisForward(true);
     setState(F);
     if (isRewind) setisRewind(false);
   }
 
   const handleRewind = () => {
-
+    clearInterval(intervalID);
     const start = Date.now();
-    intervalID = setInterval(timer, 1000, start, S);
+    setIntervalID(setInterval(fastTimer, 1000, start, S));
     if (isPlaying && !isRewind) setisRewind(true);
     setState(B);
     if (isForward) setisForward(false);
