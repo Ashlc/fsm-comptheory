@@ -87,17 +87,11 @@ function App() {
     if (isForward) setisForward(false);
   }
 
-  const end = () => {
-    setisForward(false);
-    setisRewind(false);
-    setisPlaying(false);
-    setState(A);
-  }
 
   return (
     <div id='background' className='flex flex-col h-screen w-screen bg-[#311F13]'>
       <div className="flex justify-center items-end h-1/3 w-full">
-        <img src={state} alt="" className='h-4/5' onClick={end} />
+        <img src={state} alt="" className='h-4/5' />
       </div>
       <div className='w-full h-2/3 flex flex-col justify-center items-center gap-10'>
         <div className="flex flex-row justify-center items-center h-[50%] w-128 px-5 gap-20
