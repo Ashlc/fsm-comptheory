@@ -13,17 +13,23 @@ import B from './assets/states/B.svg';
 
 function App() {
 
+  // Defining the base states and their respective functions.
   const [isPlaying, setisPlaying] = useState(false);
   const [isForward, setisForward] = useState(false);
   const [isRewind, setisRewind] = useState(false);
   const [intervalID, setIntervalID] = useState(0);
+  
+  // The following state controls the diagram. Note that it refers to the imports of each asset.  
   const [state, setState] = useState(S);
+  
+  // Button press color coordination.
   const standardColor = 'bg-[#B07154]';
   const activeColor = 'bg-[#4C2B1C]';
 
+  // Timer for end of tape simulation.
   const endTimer = (start) => {
     console.log((Date.now() - start));
-    if ((Date.now() - start) > 10000) {
+    if ((Date.now() - start) > 10000) { // It ends after 10 seconds. 
       setState(A);
       setisForward(false);
       setisRewind(false);
@@ -31,9 +37,14 @@ function App() {
       clearInterval(intervalID);
     }
   }
-  
+
+  /*
+      Timer for end of tape considering the state is either forward or backwards.
+      It receives the time at which the function is called (start) and the state we'll
+      go to if the timer runs out.
+  */ 
   const fastTimer = (start, to) => {
-    if ((Date.now() - start) > 5000) {
+    if ((Date.now() - start) > 5000) { // 5 second timer.
       setState(to);
       setisForward(false);
       setisRewind(false);
@@ -42,10 +53,15 @@ function App() {
     }
   }
 
+  // Function that will be called when the Play/Pause button is pressed.
   const handlePlayPause = () => {
 
     clearInterval(intervalID);
 
+    /*
+        Below are the conditionals for what it does depending on what state we're on.
+        It checks the states we've defined at the top.
+    */
     if (isForward && isPlaying) {
       setisForward(false);
       setState(P);
@@ -69,6 +85,7 @@ function App() {
     }
   }
 
+  // Function that will be called when the forward button is pressed. 
   const handleForward = () => {
     clearInterval(intervalID);
     const start = Date.now();
@@ -78,6 +95,7 @@ function App() {
     if (isRewind) setisRewind(false);
   }
 
+  // Function that will be called when the rewind button is pressed.
   const handleRewind = () => {
     clearInterval(intervalID);
     const start = Date.now();
@@ -87,7 +105,9 @@ function App() {
     if (isForward) setisForward(false);
   }
 
-
+  // HTML elements with some basic logic to wrap things up.
+  // The animation is controlled by CSS classes that change with the states aforementioned.
+  
   return (
     <div id='background' className='flex flex-col h-screen w-screen bg-[#311F13]'>
       <div className="flex justify-center items-end h-1/3 w-full">
